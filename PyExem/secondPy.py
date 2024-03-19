@@ -54,8 +54,6 @@ def file_update_process(file):
   for row in text_list:
     exist_lang.append(row[0])
 
-  print(exist_lang)
-
   # 원본 언어 설정
   if 'en' in exist_lang:
       translating_data = [row for row in text_list if row[0] == 'en']
@@ -80,27 +78,24 @@ def file_update_process(file):
   translated_list = list(map(list, zip(*translated_list)))
   print(translated_list)
 
-  def delete_file_data(file):
-    with open(file, 'w', encoding='utf-8-sig') as f:
-      f.truncate(0)
-
   # 파일 초기화
+  if len(translated_list) == 0 : return;
   print("Delete File Data")
-  file_list = get_folder_names(file_path)
-  print_list(file_list)
-  for file in file_list:
-    delete_file_data(file)
+  delete_file_data(file)
 
   # TODO : encoding 형식 설정
   # 파일 쓰기
+  print("Write Data")
   for translated_data in translated_list:
     with open(file, 'a', newline='', encoding='utf-8-sig') as f:
       writer = csv.writer(f)
       writer.writerow(translated_data)
 
+def delete_file_data(file):
+  with open(file, 'w', encoding='utf-8-sig') as f:
+    f.truncate(0)
+
 def translate_to_otherLang(text, target_lang):
-  if(target_lang == "ko"): return text
-  return text + " " + target_lang # 지워야함
   return Translator().translate(text, dest=target_lang).text
 
 
@@ -110,7 +105,7 @@ def translate_to_allLang(file_list):
 
 # 실행
 print("Translate")
-file_path = "Your File Path"
+file_path = "C:/Users/TAK/Desktop/123"
 file_list = get_folder_names(file_path)
 print_list(file_list)
 translate_to_allLang(file_list)
